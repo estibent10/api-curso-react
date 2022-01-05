@@ -29,11 +29,11 @@ namespace api_curso_react.Controllers
             return await _context.Operadores.ToListAsync();
         }
 
-        // GET: api/Operadores/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Operador>> GetOperador(string id)
+        // GET: api/Operadores/1/5
+        [HttpGet("{TipoIdentificacion}/{Idenfificacion}")]
+        public async Task<ActionResult<Operador>> GetOperador(TipoIdentificacion TipoIdentificacion, string Idenfificacion)
         {
-            var operador = await _context.Operadores.FindAsync(id);
+            var operador = await _context.Operadores.FindAsync(TipoIdentificacion, Idenfificacion);
 
             if (operador == null)
             {
@@ -46,10 +46,10 @@ namespace api_curso_react.Controllers
         // PUT: api/Operadores/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutOperador(string id, Operador operador)
+        [HttpPut("{TipoIdentificacion}/{Idenfificacion}")]
+        public async Task<IActionResult> PutOperador(TipoIdentificacion TipoIdentificacion, string Idenfificacion, Operador operador)
         {
-            if (id != operador.Identificacion)
+            if (Idenfificacion != operador.Identificacion && TipoIdentificacion != operador.TipoIdentificacion)
             {
                 return BadRequest();
             }
@@ -63,7 +63,7 @@ namespace api_curso_react.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!OperadorExists(id))
+                if (!OperadorExists(TipoIdentificacion, Idenfificacion))
                 {
                     return NotFound();
                 }
@@ -91,7 +91,7 @@ namespace api_curso_react.Controllers
             }
             catch (DbUpdateException)
             {
-                if (OperadorExists(operador.Identificacion))
+                if (OperadorExists(operador.TipoIdentificacion, operador.Identificacion))
                 {
                     return Conflict();
                 }
@@ -100,15 +100,15 @@ namespace api_curso_react.Controllers
                     throw;
                 }
             }
-
-            return CreatedAtAction("GetOperador", new { id = operador.Identificacion }, operador);
+            
+            return CreatedAtAction("GetOperador", new { TipoIdentificacion = operador.TipoIdentificacion, Idenfificacion = operador.Identificacion }, operador);
         }
 
         // DELETE: api/Operadores/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Operador>> DeleteOperador(string id)
+        [HttpDelete("{TipoIdentificacion}/{Idenfificacion}")]
+        public async Task<ActionResult<Operador>> DeleteOperador(TipoIdentificacion TipoIdentificacion, string Idenfificacion)
         {
-            var operador = await _context.Operadores.FindAsync(id);
+            var operador = await _context.Operadores.FindAsync(TipoIdentificacion, Idenfificacion);
             if (operador == null)
             {
                 return NotFound();
@@ -120,9 +120,9 @@ namespace api_curso_react.Controllers
             return operador;
         }
 
-        private bool OperadorExists(string id)
+        private bool OperadorExists(TipoIdentificacion TipoIdentificacion, string Idenfificacion)
         {
-            return _context.Operadores.Any(e => e.Identificacion == id);
+            return _context.Operadores.Any(e => e.Identificacion == Idenfificacion && e.TipoIdentificacion == TipoIdentificacion);
         }
     }
 }
