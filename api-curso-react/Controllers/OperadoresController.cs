@@ -58,7 +58,9 @@ namespace api_curso_react.Controllers
 
             try
             {
-                operador.ModificadoPor = "diazgs";
+                operador.CreadoPor = "SysUser";
+                operador.Activo = true;
+
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -82,7 +84,7 @@ namespace api_curso_react.Controllers
         [HttpPost]
         public async Task<ActionResult<Operador>> PostOperador(Operador operador)
         {
-            operador.CreadoPor = "diazgs";
+            operador.CreadoPor = "SysUser";
 
             _context.Operadores.Add(operador);
             try
