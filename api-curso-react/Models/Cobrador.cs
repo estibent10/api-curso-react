@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 
 namespace api_curso_react.Models
 {
-    public class Operador : IEntidadAuditable
+    public class Cobrador : IEntidadAuditable
     {
         public TipoIdentificacion TipoIdentificacion { get; set; }
         public string Identificacion { get; set; }
         public string Nombre { get; set; }
-        public string Email { get; set; }
-        public string CuentaIBAN { get; set; }
+        public string Email { get; set; }        
         public bool Activo { get; set; }
 
         #region Datos de Auditoría
@@ -23,7 +22,9 @@ namespace api_curso_react.Models
         #endregion
 
         #region Relaciones
-        public ICollection<Cobrador> Cobradores { get; set; }
+        public TipoIdentificacion TipoIdentificacionOperador { get; set; }
+        public string IdentificacionOperador { get; set; }
+        public Operador Operador { get; set; }
         #endregion
     }
 }

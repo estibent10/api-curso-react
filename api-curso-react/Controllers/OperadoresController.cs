@@ -53,6 +53,8 @@ namespace api_curso_react.Controllers
             {
                 return BadRequest();
             }
+            //_context.Entry(operador).Property(p => p.CreadoPor).IsModified = false;
+            //_context.Entry(operador).Property(p => p.FechaCreacion).IsModified = false;
 
             _context.Entry(operador).State = EntityState.Modified;
 

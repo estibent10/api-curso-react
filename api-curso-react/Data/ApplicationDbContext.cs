@@ -13,6 +13,7 @@ namespace api_curso_react.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
         public DbSet<Operador> Operadores { get; set; }
+        public DbSet<Cobrador> Cobradores { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -45,6 +46,25 @@ namespace api_curso_react.Data
                        modelo.Property(C => C.Nombre).IsRequired().HasMaxLength(150);
                        modelo.Property(C => C.Email).IsRequired().HasMaxLength(150);
                        modelo.Property(C => C.CuentaIBAN).IsRequired().HasMaxLength(50);
+                   });
+
+            builder.Entity<Cobrador>(
+                   modelo =>
+                   {
+                       modelo.HasKey(C => new { C.TipoIdentificacion, C.Identificacion }).HasName("PK_Cobradores");
+                       modelo.Property(C => C.TipoIdentificacion).IsRequired();
+                       modelo.Property(C => C.Identificacion).IsRequired().HasMaxLength(22);
+                       modelo.Property(C => C.Nombre).IsRequired().HasMaxLength(150);
+                       modelo.Property(C => C.Email).IsRequired().HasMaxLength(150);
+
+                       //Relaciones
+                       modelo.Property(C => C.TipoIdentificacionOperador).IsRequired();
+                       modelo.Property(C => C.IdentificacionOperador).IsRequired().HasMaxLength(22);
+                       modelo.HasOne(C => C.Operador)
+                       .WithMany(C => C.Cobradores)
+                       .HasForeignKey(C => new { C.TipoIdentificacionOperador,  C.IdentificacionOperador})
+                       .OnDelete(DeleteBehavior.Restrict)
+                       .HasConstraintName("FK_Operadores_TipoIdentificacionOperador_IdentificacionOperador");
 
 
                    });
@@ -58,6 +78,7 @@ namespace api_curso_react.Data
                   .Select(e => e.Entity as IEntidadAuditable))
             {
                 EntryForUpdate.FechaModificacion = DateTime.Now;
+                
             }
 
             return await base.SaveChangesAsync();

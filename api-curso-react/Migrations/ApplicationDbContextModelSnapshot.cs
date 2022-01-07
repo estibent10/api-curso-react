@@ -19,6 +19,62 @@ namespace api_curso_react.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("api_curso_react.Models.Cobrador", b =>
+                {
+                    b.Property<int>("TipoIdentificacion")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Identificacion")
+                        .HasColumnType("nvarchar(22)")
+                        .HasMaxLength(22);
+
+                    b.Property<bool>("Activo")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValueSql("1");
+
+                    b.Property<string>("CreadoPor")
+                        .HasColumnType("nvarchar(75)")
+                        .HasMaxLength(75);
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(150)")
+                        .HasMaxLength(150);
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<DateTime?>("FechaModificacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("IdentificacionOperador")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(22)")
+                        .HasMaxLength(22);
+
+                    b.Property<string>("ModificadoPor")
+                        .HasColumnType("nvarchar(75)")
+                        .HasMaxLength(75);
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(150)")
+                        .HasMaxLength(150);
+
+                    b.Property<int>("TipoIdentificacionOperador")
+                        .HasColumnType("int");
+
+                    b.HasKey("TipoIdentificacion", "Identificacion")
+                        .HasName("PK_Cobradores");
+
+                    b.HasIndex("TipoIdentificacionOperador", "IdentificacionOperador");
+
+                    b.ToTable("Cobradores");
+                });
+
             modelBuilder.Entity("api_curso_react.Models.Operador", b =>
                 {
                     b.Property<int>("TipoIdentificacion")
@@ -68,6 +124,16 @@ namespace api_curso_react.Migrations
                         .HasName("PK_Operadores");
 
                     b.ToTable("Operadores");
+                });
+
+            modelBuilder.Entity("api_curso_react.Models.Cobrador", b =>
+                {
+                    b.HasOne("api_curso_react.Models.Operador", "Operador")
+                        .WithMany("Cobradores")
+                        .HasForeignKey("TipoIdentificacionOperador", "IdentificacionOperador")
+                        .HasConstraintName("FK_Operadores_TipoIdentificacionOperador_IdentificacionOperador")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
